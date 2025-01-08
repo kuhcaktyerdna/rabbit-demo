@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  rabbit:
+    container_name: rabbit
+    image: rabbitmq:3.10.7-management-alpine
+    ports:
+      - "15671:15671"
+      - "15672:15672"
+      - "5672:5672"

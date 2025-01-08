@@ -1,0 +1,9 @@
+services:
+  rabbit:
+    container_name: rabbit
+    build:
+      context: ../
+    ports:
+      - "15671:15671"
+      - "15672:15672"
+      - "5672:5672"

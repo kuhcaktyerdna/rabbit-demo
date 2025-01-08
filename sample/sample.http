@@ -1,0 +1,12 @@
+###
+POST http://localhost:8080/api/publish/string?message=test
+
+###
+POST http://localhost:8080/api/publish/object
+Content-Type: application/json
+
+{
+  "username": "test user",
+  "password": "passw0rd",
+  "email": "test_user@gmail.com"
+}
