@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RabbitConsumer {
 
-    @RabbitListener(queues = RabbitConfig.QUEUE_STRINGS_NAME)
+    @RabbitListener(queues = RabbitConfig.QUEUE_STRINGS_NAME, ackMode = "MANUAL")
     public void listenForString(final String message) {
         log.info("Consumed message: {}", message);
     }
@@ -18,6 +18,11 @@ public class RabbitConsumer {
     @RabbitListener(queues = RabbitConfig.QUEUE_OBJECT_NAME)
     public void listenForObjects(final User user) {
         log.info("Consumed user: {}", user);
+    }
+
+    @RabbitListener(queues = RabbitConfig.QUEUE_DLQ)
+    public void listenForDlq(final Object message) {
+        log.info("Consumed message in dlq: {}", message);
     }
 
 }

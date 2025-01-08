@@ -12,18 +12,32 @@ public class RabbitConfig {
 
     public static final String QUEUE_OBJECT_NAME = "q.demo.objects";
     public static final String QUEUE_STRINGS_NAME = "q.demo.strings";
+    public static final String QUEUE_DLQ = "q.demo.dlq";
     public static final String EXCHANGE_NAME = "ex.demo.objects";
     public static final String ROUTING_KEY_OBJECTS = "routing-key.objects.*";
     public static final String ROUTING_KEY_STRINGS = "routing-key.strings.*";
 
     @Bean
     public Queue objectsQueue() {
-        return new Queue(QUEUE_OBJECT_NAME);
+        return QueueBuilder.durable(QUEUE_OBJECT_NAME)
+                .deadLetterExchange("")
+                .deadLetterRoutingKey(QUEUE_DLQ)
+                .ttl(5000)
+                .build();
     }
 
     @Bean
     public Queue stringsQueue() {
-        return new Queue(QUEUE_STRINGS_NAME);
+        return QueueBuilder.durable(QUEUE_STRINGS_NAME)
+                .deadLetterExchange("")
+                .deadLetterRoutingKey(QUEUE_DLQ)
+                .ttl(5000)
+                .build();
+    }
+
+    @Bean
+    public Queue dlqQueue() {
+        return new Queue(QUEUE_DLQ);
     }
 
     @Bean
@@ -49,9 +63,9 @@ public class RabbitConfig {
 
     @Bean
     public MessageConverter jsonToMapMessageConverter() {
-        DefaultClassMapper defaultClassMapper = new DefaultClassMapper();
+        final DefaultClassMapper defaultClassMapper = new DefaultClassMapper();
         defaultClassMapper.setTrustedPackages("com.demo.rabbit_demo.model");
-        Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
+        final Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
         jackson2JsonMessageConverter.setClassMapper(defaultClassMapper);
         return jackson2JsonMessageConverter;
     }
